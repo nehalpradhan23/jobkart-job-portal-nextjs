@@ -4,8 +4,9 @@ import { Menu } from "lucide-react";
 import { Button } from "../ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import Link from "next/link";
+import { SignOutButton, UserButton } from "@clerk/nextjs";
 
-export default function Header() {
+export default function Header({ user }) {
   const menuItems = [
     {
       label: "Home",
@@ -15,18 +16,39 @@ export default function Header() {
     {
       label: "Login",
       path: "/sign-in",
-      show: true,
+      show: !user,
     },
     {
       label: "Signup",
-      path: "/sing-up",
-      show: true,
+      path: "/sign-up",
+      show: !user,
+    },
+    {
+      label: "Jobs",
+      path: "/jobs",
+      show: user,
+    },
+    {
+      label: "Activity",
+      path: "/activity",
+      show: user,
+    },
+    {
+      label: "Membership",
+      path: "/membership",
+      show: user,
+    },
+    {
+      label: "Account",
+      path: "/account",
+      show: user,
     },
   ];
   // ================================================
   return (
     <div>
       <header className="flex h-16 w-full shrink-0 items-center bg-gray-100 px-5">
+        {/* mobile navigation sidebar ============================= */}
         <Sheet>
           <SheetTrigger asChild>
             <Button className="bg-background text-black lg:hidden hover:bg-gray-200">
@@ -34,11 +56,15 @@ export default function Header() {
               <span className="sr-only">Toggle navigation menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="w-[200px]">
-            <Link href={"#"} className="mr-6 hidden lg:flex">
+          <SheetContent
+            side="left"
+            className="w-[200px] flex flex-col justify-between"
+          >
+            {/* <Link href={"#"} className="mr-6 hidden lg:flex">
               <h3>JOBKART</h3>
-            </Link>
-            <div className="grid gap-2 py6">
+            </Link> */}
+            {/* <div className="grid gap-2 py-6"> */}
+            <div className="flex flex-col py-6 justify-between">
               {menuItems.map((item) =>
                 item.show ? (
                   <Link
@@ -50,6 +76,13 @@ export default function Header() {
                 ) : null
               )}
             </div>
+            <UserButton afterSwitchSessionUrl="/" />
+            {/* <SignOutButton
+              redirectUrl="/"
+              className="hover:underline font-bold"
+            >
+              Logout
+            </SignOutButton> */}
           </SheetContent>
         </Sheet>
         {/* ================================================== */}
@@ -70,6 +103,10 @@ export default function Header() {
               </Link>
             ) : null
           )}
+          <UserButton afterSwitchSessionUrl="/" />
+          {/* <SignOutButton redirectUrl="/" className="hover:underline text-sm">
+            Logout
+          </SignOutButton> */}
         </nav>
       </header>
     </div>
