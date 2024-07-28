@@ -6,7 +6,6 @@ import { Label } from "../ui/label";
 function CommonForm({
   action,
   buttonText,
-  isBtnDisabled,
   formControls,
   isBtnDisabled,
   btnType,
@@ -14,12 +13,13 @@ function CommonForm({
   setFormData,
   handleFileChange,
 }) {
+  // ==========================================================================
   function renderInputByComponentType(getCurrentControl) {
     let content = null;
     switch (getCurrentControl.componentType) {
       case "input":
         content = (
-          <div className="relative flex items-center mt-8">
+          <div className="relative flex items-center mt-6">
             <Input
               type="text"
               disabled={getCurrentControl.disabled}
@@ -33,17 +33,18 @@ function CommonForm({
                   [e.target.name]: e.target.value,
                 })
               }
-              className="w-full rounded-md h-[60px] px-4 border bg-gray-100 text-lg outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:drop-shadow-lg focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+              className="w-full rounded-sm h-[50px] px-3 border bg-gray-200 text-lg outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:drop-shadow-lg focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
             />
           </div>
         );
 
         break;
+
       case "file":
         content = (
           <Label
-            for={getCurrentControl.label}
-            className="flex bg-gray-100 items-center px-3 py-3 mx-auto mt-6 text-center border-2 border-dashed rounded-lg cursor-pointer"
+            htmlFor={getCurrentControl.label}
+            className="flex items-center px-3 py-2 mx-auto mt-6 text-center border-2 border-dashed rounded-lg cursor-pointer bg-gray-200 gap-2"
           >
             <h2>{getCurrentControl.label}</h2>
             <Input
@@ -53,6 +54,7 @@ function CommonForm({
             />
           </Label>
         );
+        break;
       default:
         content = (
           <div className="relative flex items-center mt-8">
@@ -69,7 +71,7 @@ function CommonForm({
                   [e.target.name]: e.target.value,
                 })
               }
-              className="w-full rounded-md h-[60px] px-4 border bg-gray-100 text-lg outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:drop-shadow-lg focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+              className="w-full rounded-sm h-[45px] px-3 border bg-gray-200 text-lg outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:drop-shadow-lg focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
             />
           </div>
         );
@@ -80,7 +82,9 @@ function CommonForm({
   // ======================================
   return (
     <form action={action}>
-      {formControls.map((control) => renderInputByComponentType(control))}
+      {formControls.map((control) => (
+        <div key={control.label}>{renderInputByComponentType(control)}</div>
+      ))}
       <div className="mt-6 w-full">
         <Button
           type={btnType || "submit"}

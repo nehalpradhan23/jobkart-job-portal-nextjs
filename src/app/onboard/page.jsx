@@ -1,7 +1,9 @@
+import OnBoard from "@/components/on-board/OnBoard";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import React from "react";
 
-function OnBoard() {
-  return <div>OnBoard</div>;
+function OnBoardPage() {
+  return <OnBoard />;
 }
 
-export default OnBoard;
+export default OnBoardPage;

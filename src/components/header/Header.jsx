@@ -4,7 +4,7 @@ import { Menu } from "lucide-react";
 import { Button } from "../ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import Link from "next/link";
-import { SignOutButton, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignOutButton, UserButton } from "@clerk/nextjs";
 
 export default function Header({ user }) {
   const menuItems = [
@@ -47,7 +47,7 @@ export default function Header({ user }) {
   // ================================================
   return (
     <div>
-      <header className="flex h-16 w-full shrink-0 items-center bg-gray-100 px-5">
+      <header className="flex h-16 max-w-7xl mx-auto shrink-0 items-center px-5">
         {/* mobile navigation sidebar ============================= */}
         <Sheet>
           <SheetTrigger asChild>
@@ -68,6 +68,7 @@ export default function Header({ user }) {
               {menuItems.map((item) =>
                 item.show ? (
                   <Link
+                    key={item.path}
                     href={item.path}
                     className="flex w-full items-center py-2 text-lg font-bold hover:underline hover:scale-105 transition-all p-2 rounded-md"
                   >
@@ -76,13 +77,15 @@ export default function Header({ user }) {
                 ) : null
               )}
             </div>
-            <UserButton afterSwitchSessionUrl="/" />
-            {/* <SignOutButton
-              redirectUrl="/"
-              className="hover:underline font-bold"
-            >
-              Logout
-            </SignOutButton> */}
+            {/* <UserButton afterSwitchSessionUrl="/" /> */}
+            <SignedIn>
+              <SignOutButton
+                redirectUrl="/"
+                className="hover:underline font-bold"
+              >
+                Logout
+              </SignOutButton>
+            </SignedIn>
           </SheetContent>
         </Sheet>
         {/* ================================================== */}
@@ -96,6 +99,7 @@ export default function Header({ user }) {
           {menuItems.map((item) =>
             item.show ? (
               <Link
+                key={item.path}
                 href={item.path}
                 className="group inline-flex h-9 w-max items-center rounded-sm bg-white px-3 py-2 text-sm font-medium hover:bg-slate-800 hover:text-white transition-all"
               >
