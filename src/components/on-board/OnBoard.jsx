@@ -8,6 +8,8 @@ import {
   initialRecruiterFormData,
   recruiterOnboardFormControls,
 } from "@/utils";
+import { useUser } from "@clerk/nextjs";
+import { createProfileAction } from "@/actions";
 
 function OnBoard() {
   const [currentTab, setCurrentTab] = useState("candidate");
@@ -17,11 +19,16 @@ function OnBoard() {
   const [candidateFormData, setCandidateFormData] = useState(
     initialCandidateFormData
   );
+
+  const currentAuthUser = useUser();
+  const { user } = currentAuthUser;
+  console.log(currentAuthUser, "current auth user");
+
   function handleTabChange(value) {
     setCurrentTab(value);
   }
 
-  console.log(recruiterFormData, "recruiter form data");
+  // console.log(recruiterFormData, "recruiter form data");
 
   function handleRecruiterFormValid() {
     return (
@@ -30,6 +37,18 @@ function OnBoard() {
       recruiterFormData.companyName.trim() !== "" &&
       recruiterFormData.companyRole.trim() !== ""
     );
+  }
+
+  async function createProfile() {
+    const data = {
+      recruiterInfo: recruiterFormData,
+      role: "recruiter",
+      isPremiumUser: false,
+      userId: user?.id,
+      email: user?.primaryEmailAddress?.emailAddress,
+    };
+
+    await createProfileAction(data, "/onboard");
   }
   // =======================================
   return (
@@ -61,6 +80,7 @@ function OnBoard() {
             formData={recruiterFormData}
             setFormData={setRecruiterFormData}
             isBtnDisabled={!handleRecruiterFormValid()}
+            action={createProfile}
           />
         </TabsContent>
       </Tabs>
