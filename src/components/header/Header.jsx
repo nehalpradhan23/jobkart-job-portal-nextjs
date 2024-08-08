@@ -2,11 +2,20 @@
 
 import { Menu } from "lucide-react";
 import { Button } from "../ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "../ui/sheet";
 import Link from "next/link";
 import { SignedIn, SignOutButton, UserButton } from "@clerk/nextjs";
+import { useState } from "react";
 
 export default function Header({ user, profileInfo }) {
+  const [openSheet, setOpenSheet] = useState(false);
   const menuItems = [
     {
       label: "Home",
@@ -49,7 +58,7 @@ export default function Header({ user, profileInfo }) {
     <div>
       <header className="flex h-16 max-w-7xl mx-auto shrink-0 items-center px-5">
         {/* mobile navigation sidebar ============================= */}
-        <Sheet>
+        <Sheet open={openSheet} onOpenChange={setOpenSheet}>
           <SheetTrigger asChild>
             <Button className="bg-background text-black lg:hidden hover:bg-gray-200">
               <Menu className="h-6 w-6" />
@@ -63,11 +72,20 @@ export default function Header({ user, profileInfo }) {
             {/* <Link href={"#"} className="mr-6 hidden lg:flex">
               <h3>JOBKART</h3>
             </Link> */}
+            <SheetHeader>
+              <SheetTitle className="text-2xl font-bold">
+                <Link onClick={() => setOpenSheet(false)} href={"/"}>
+                  JOBKART
+                </Link>
+              </SheetTitle>
+              <SheetDescription></SheetDescription>
+            </SheetHeader>
             {/* <div className="grid gap-2 py-6"> */}
             <div className="flex flex-col py-6 justify-between">
               {menuItems.map((item) =>
                 item.show ? (
                   <Link
+                    onClick={() => setOpenSheet(false)}
                     key={item.path}
                     href={item.path}
                     className="flex w-full items-center py-2 text-lg font-bold hover:underline hover:scale-105 transition-all p-2 rounded-md"
@@ -82,6 +100,7 @@ export default function Header({ user, profileInfo }) {
               <SignOutButton
                 redirectUrl="/"
                 className="hover:underline font-bold"
+                onClick={() => setOpenSheet(false)}
               >
                 Logout
               </SignOutButton>
